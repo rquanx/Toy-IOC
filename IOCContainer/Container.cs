@@ -12,17 +12,17 @@ namespace IOCContainer
         /// <summary>
         /// 注册容器
         /// </summary>
-        private Dictionary<string, RegisterModel> Contain = new Dictionary<string, RegisterModel>();
+        private readonly Dictionary<string, RegisterModel> Contain = new Dictionary<string, RegisterModel>();
 
         /// <summary>
         /// 构造函数参数容器
         /// </summary>
-        private Dictionary<string, object[]> ParametersContain = new Dictionary<string, object[]>();
+        private readonly Dictionary<string, object[]> ParametersContain = new Dictionary<string, object[]>();
 
         /// <summary>
         /// Scope实例实例，每次Clone都产生新的Scope容器，同一个容器时总是返回同一个Scope的实例
         /// </summary>
-        private Dictionary<string, object> ScopeContain = new Dictionary<string, object>();
+        private readonly Dictionary<string, object> ScopeContain = new Dictionary<string, object>();
 
         /// <summary>
         /// 复制映射，用于Scope
