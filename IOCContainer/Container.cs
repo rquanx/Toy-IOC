@@ -47,11 +47,11 @@ namespace IOCContainer
                 var from = fromAssembly.GetTypes().Where((item) => item.FullName == config.From).FirstOrDefault();
                 var toAssembly = Assembly.LoadFile(config.FromDll);
                 var to = toAssembly.GetTypes().Where((item) => item.FullName == config.ToDll).FirstOrDefault();
-                
+
                 // 通过Type调用泛型方法
                 GetType().GetMethod("Register")
                     .MakeGenericMethod(from, to).Invoke(this,
-                new object[] { config.Args,config.LifeTime });
+                new object[] { config.Args, config.LifeTime });
             }
         }
 
@@ -66,7 +66,7 @@ namespace IOCContainer
 
         private string GetKey(Type typeFrom, Type typeTo)
         {
-            return GetKey(typeFrom,typeTo?.FullName);
+            return GetKey(typeFrom, typeTo?.FullName);
         }
 
         private string GetKey(Type typeFrom, string toName)
@@ -124,6 +124,24 @@ namespace IOCContainer
         private void MethodInject(object instance)
         {
             var type = instance.GetType();
+            var classFlag = type.IsDefined(typeof(MethodInjectAttribute), false);
+            // TODO: 看看是否有较好的方式过滤掉一些难以处理的方法
+            // 好像没有
+            // 区分继承的方法
+            // 区分自身普通方法和get、set
+            //foreach (var method in type.GetMethods())
+            //{
+            //if (classFlag || method.IsDefined(typeof(MethodInjectAttribute), false))
+            //{
+            //    var args = new List<object>();
+            //    foreach (var param in method.GetParameters())
+            //    {
+            //        args.Add(ResolveObject(param.ParameterType));
+            //    }
+            //    method.Invoke(instance, args.ToArray());
+            //}
+            //}
+
             foreach (var method in type.GetMethods().Where((m) => m.IsDefined(typeof(MethodInjectAttribute), false)))
             {
                 var args = new List<object>();
